@@ -1,6 +1,6 @@
 package com.BodyBuddy.BodyBuddyAPI.models.enums;
 
-public enum TrainingType {
+public enum ETrainingType {
 
     SEDENTARY,
     LIGHTLY_ACTIVE,
