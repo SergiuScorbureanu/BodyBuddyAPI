@@ -12,6 +12,7 @@ import java.util.UUID;
 
 @RestController
 @RequestMapping(path = "/bodybuddy/v1/users")
+@CrossOrigin(origins = "http://localhost:4200")
 @RequiredArgsConstructor
 public class UserController {
 
@@ -22,20 +23,20 @@ public class UserController {
         return userService.getUsers();
     }
 
-    @PostMapping
-    public void createUser(@RequestBody User user) {
-        userService.createUser(user);
-    }
+//    @PostMapping
+//    public void createUser(@RequestBody User user) {
+//        userService.createUser(user);
+//    }
 
-    @PutMapping(path = "/{id}")
-    public ResponseEntity<String> updateUser(@PathVariable UUID id, @RequestBody User updatedUser) {
-        try {
-            userService.updateUser(id, updatedUser);
-            return ResponseEntity.ok("The user has been updated successfully!");
-        } catch (NoSuchElementException e) {
-            return ResponseEntity.notFound().build();
-        }
-    }
+//    @PutMapping(path = "/{id}")
+//    public ResponseEntity<String> updateUser(@PathVariable UUID id, @RequestBody User updatedUser) {
+//        try {
+//            userService.updateUser(id, updatedUser);
+//            return ResponseEntity.ok("The user has been updated successfully!");
+//        } catch (NoSuchElementException e) {
+//            return ResponseEntity.notFound().build();
+//        }
+//    }
 
     @DeleteMapping(path = "/{id}")
     public ResponseEntity<String> deleteUser(@PathVariable UUID id) {
