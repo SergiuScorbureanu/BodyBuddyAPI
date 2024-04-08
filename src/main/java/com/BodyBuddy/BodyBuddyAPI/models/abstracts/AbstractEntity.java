@@ -17,7 +17,7 @@ import java.util.UUID;
 public abstract class AbstractEntity {
 
     @Id
-    @Column(name = "id")
+    @Column(name = "id", columnDefinition = "UUID")
     @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID id;
 
