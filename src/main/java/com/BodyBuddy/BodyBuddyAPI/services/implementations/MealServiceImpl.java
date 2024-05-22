@@ -1,7 +1,10 @@
 package com.BodyBuddy.BodyBuddyAPI.services.implementations;
 
 import com.BodyBuddy.BodyBuddyAPI.models.Meal;
+import com.BodyBuddy.BodyBuddyAPI.models.User;
+import com.BodyBuddy.BodyBuddyAPI.models.dto.MealDTO;
 import com.BodyBuddy.BodyBuddyAPI.repositories.MealRepository;
+import com.BodyBuddy.BodyBuddyAPI.repositories.UserRepository;
 import com.BodyBuddy.BodyBuddyAPI.services.interfaces.MealService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -16,6 +19,7 @@ import java.util.UUID;
 public class MealServiceImpl implements MealService {
 
     private final MealRepository mealRepository;
+    private final UserRepository userRepository;
 
     @Override
     public List<Meal> getMeals() {
@@ -23,7 +27,32 @@ public class MealServiceImpl implements MealService {
     }
 
     @Override
-    public void createMeal(Meal meal) {
+    public List<Meal> getMealsByUserId(UUID userId) {
+        return mealRepository.findByUser_Id(userId);
+    }
+
+    @Override
+    public List<Meal> getMealsByUserIdAndDate(UUID userId, String date) {
+        return mealRepository.findByUserIdAndDate(userId, date);
+    }
+
+    @Override
+    public void createMealFromDTO(MealDTO mealDTO) {
+        User user = userRepository.findById(UUID.fromString(mealDTO.getUserId()))
+                .orElseThrow(() -> new RuntimeException("User not found with ID: " + mealDTO.getUserId()));
+
+        Meal meal = new Meal();
+        //mealDTO.getFoods().stream().map(food -> new MealFoods(meal.getId(), food.getId())).collect(Collectors.toCollection());
+        meal.setUser(user);
+        meal.setMealType(mealDTO.getMealType());
+        meal.setCalories(mealDTO.getCalories());
+        meal.setCarbohydrates(mealDTO.getCarbohydrates());
+        meal.setFat(mealDTO.getFat());
+        meal.setProtein(mealDTO.getProtein());
+        meal.setDate(mealDTO.getDate());
+
+        mealRepository.save(meal);
+        mealDTO.getFoods().forEach(mealFood -> meal.addFood(mealFood.getFood(), mealFood.getQuantity()));
         mealRepository.save(meal);
     }
 
