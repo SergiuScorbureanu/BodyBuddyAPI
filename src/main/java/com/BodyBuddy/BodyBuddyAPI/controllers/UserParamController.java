@@ -2,7 +2,6 @@ package com.BodyBuddy.BodyBuddyAPI.controllers;
 
 import com.BodyBuddy.BodyBuddyAPI.models.UserParam;
 import com.BodyBuddy.BodyBuddyAPI.models.dto.UserParamDTO;
-import com.BodyBuddy.BodyBuddyAPI.repositories.UserParamRepository;
 import com.BodyBuddy.BodyBuddyAPI.services.implementations.UserParamServiceImpl;
 import lombok.*;
 import org.springframework.http.HttpStatus;
@@ -19,7 +18,6 @@ import java.util.*;
 public class UserParamController {
 
     private final UserParamServiceImpl userParamService;
-    private final UserParamRepository userParamRepository;
 
     @GetMapping(path = "/{id}")
     public List<UserParam> getUserParams(@PathVariable UUID id) {

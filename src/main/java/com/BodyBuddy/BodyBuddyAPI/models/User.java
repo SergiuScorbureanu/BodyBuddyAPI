@@ -1,7 +1,8 @@
 package com.BodyBuddy.BodyBuddyAPI.models;
 
-import com.BodyBuddy.BodyBuddyAPI.models.abstracts.AbstractEntity;
+import com.BodyBuddy.BodyBuddyAPI.models.abstracts.BaseEntity;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
@@ -13,7 +14,6 @@ import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 
 
-import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -29,7 +29,7 @@ import java.util.Set;
                 @UniqueConstraint(columnNames = "username"),
                 @UniqueConstraint(columnNames = "email")
         })
-public class User extends AbstractEntity {
+public class User extends BaseEntity {
 
     @NotBlank
     @Size(max = 20)
@@ -50,11 +50,15 @@ public class User extends AbstractEntity {
             inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Set<Role> roles = new HashSet<>();
 
-    @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(name = "user_meals",
-            joinColumns = @JoinColumn(name = "user_id"),
-            inverseJoinColumns = @JoinColumn(name = "meal_id"))
-   private Set<Meal> meals = new HashSet<>();
+//    @ManyToMany(fetch = FetchType.LAZY)
+//    @JoinTable(name = "user_meals",
+//            joinColumns = @JoinColumn(name = "user_id"),
+//            inverseJoinColumns = @JoinColumn(name = "meal_id"))
+//   private Set<Meal> meals = new HashSet<>();
+
+    @JsonManagedReference
+    @OneToMany(mappedBy = "user")
+    private Set<Meal> meals = new HashSet<>();
 
     @OneToMany(mappedBy="userId")
     private Set<UserParam> userParams = new HashSet<>();

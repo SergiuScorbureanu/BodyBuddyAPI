@@ -1,10 +1,9 @@
 package com.BodyBuddy.BodyBuddyAPI.models;
 
-import com.BodyBuddy.BodyBuddyAPI.models.abstracts.AbstractEntity;
+import com.BodyBuddy.BodyBuddyAPI.models.abstracts.BaseEntity;
 import com.BodyBuddy.BodyBuddyAPI.models.enums.EGender;
 import com.BodyBuddy.BodyBuddyAPI.models.enums.ETrainingType;
 import com.BodyBuddy.BodyBuddyAPI.models.enums.EWeightGoal;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -13,7 +12,6 @@ import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 
 import java.time.LocalDate;
-import java.util.UUID;
 
 @Entity
 @Table(name = "user_params")
@@ -22,7 +20,7 @@ import java.util.UUID;
 @AllArgsConstructor
 @Getter
 @Setter
-public class UserParam extends AbstractEntity {
+public class UserParam extends BaseEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="user_id", nullable=false)
