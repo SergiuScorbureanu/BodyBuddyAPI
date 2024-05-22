@@ -1,23 +1,30 @@
 package com.BodyBuddy.BodyBuddyAPI.models;
 
-import com.BodyBuddy.BodyBuddyAPI.models.abstracts.AbstractEntity;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Table;
+import com.BodyBuddy.BodyBuddyAPI.models.abstracts.BaseEntity;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 
-@Entity
-@Table(name = "foods")
+import java.util.*;
+
+@Entity(name = "Food")
+@Table(name = "food")
 @SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
 @Setter
-public class Food extends AbstractEntity {
+public class Food extends BaseEntity {
+
+    @OneToMany(
+            mappedBy = "food",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true
+    )
+    private List<MealFood> meals = new ArrayList<>();
 
     @Column(name = "name")
     private String name;
@@ -25,7 +32,7 @@ public class Food extends AbstractEntity {
     @Column(name = "calories")
     private Double calories;
 
-    @Column(name = "carbohydrates ")
+    @Column(name = "carbohydrates")
     private Double carbohydrates ;
 
     @Column(name = "fat")
@@ -33,6 +40,9 @@ public class Food extends AbstractEntity {
 
     @Column(name = "protein")
     private Double protein;
+
+    @Column(name = "measurement_unit")
+    private String measurementUnit;
 
     @Column(name = "quantity")
     private Double quantity;

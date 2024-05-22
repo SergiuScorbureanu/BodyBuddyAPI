@@ -14,7 +14,9 @@ public interface FoodService {
 
     public void createFood(Food food);
 
-    public void updateFood(UUID id, Food updatedFood);
+    public void updateFood(Long id, Food updatedFood);
 
-    public void deleteFood(UUID id);
+    public void deleteFood(Long id);
+
+    public List<Food> searchFoods(String searchTerm);
 }

@@ -33,7 +33,7 @@ public class FoodServiceImpl implements FoodService {
     }
 
     @Override
-    public void updateFood(UUID id, Food updatedFood) {
+    public void updateFood(Long id, Food updatedFood) {
         Food food = foodRepository.findById(id).orElseThrow(() ->
                 new NoSuchElementException("Food with the id " + id + " doesn't exist in the database."));
 
@@ -49,10 +49,15 @@ public class FoodServiceImpl implements FoodService {
     }
 
     @Override
-    public void deleteFood(UUID id) {
+    public void deleteFood(Long id) {
         Food food = foodRepository.findById(id).orElseThrow(() ->
                 new NoSuchElementException("Food with the id " + id + " doesn't exist in the database."));
         foodRepository.delete(food);
+    }
+
+    @Override
+    public List<Food> searchFoods(String searchTerm) {
+        return foodRepository.findByNameContainingIgnoreCase(searchTerm);
     }
 
 }
