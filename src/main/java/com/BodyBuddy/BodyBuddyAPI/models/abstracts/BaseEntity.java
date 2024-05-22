@@ -14,7 +14,7 @@ import java.util.UUID;
 @AllArgsConstructor
 @SuperBuilder
 @ToString
-public abstract class AbstractEntity {
+public abstract class BaseEntity {
 
     @Id
     @Column(name = "id", columnDefinition = "UUID")

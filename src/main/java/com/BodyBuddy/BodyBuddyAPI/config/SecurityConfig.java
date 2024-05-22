@@ -61,7 +61,9 @@ public class SecurityConfig {
                         auth.requestMatchers("/bodybuddy/v1/auth/**").permitAll()
                                 .requestMatchers("/bodybuddy/v1/users/**").permitAll()
                                 .requestMatchers("/bodybuddy/v1/user_params/**").permitAll()
-                                .requestMatchers("/bodybuddy/v1/caloeries-calculator/**").permitAll()
+                                .requestMatchers("/bodybuddy/v1/nutritional-calculator/**").permitAll()
+                                .requestMatchers("/bodybuddy/v1/meals/**").permitAll()
+                                .requestMatchers("/bodybuddy/v1/foods/**").permitAll()
                                 .requestMatchers("/bodybuddy/v1/test/**").permitAll()
                                 .anyRequest().authenticated()
                 );
