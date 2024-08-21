@@ -12,7 +12,7 @@ import java.util.*;
 
 
 @RestController
-@RequestMapping(path = "/bodybuddy/v1/user_params")
+@RequestMapping(path = "/bodybuddy/v1/user-params")
 @CrossOrigin(origins = "http://localhost:4200")
 @RequiredArgsConstructor
 public class UserParamController {

@@ -10,19 +10,24 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDate;
+import java.util.UUID;
 
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
 @Setter
-public class UserParamDTO {
+public class UserDTO {
 
-    private String userId;
+    private UUID id;
+    private String username;
+    private String email;
+    private String picture;
+    private String role;
     private LocalDate birthDay;
-    private EGender gender;
-    private Double height;
-    private Double weight;
     private ETrainingType trainingType;
-    private EWeightChangeRate weightChangeRate;
     private EWeightGoal weightGoal;
+    private EGender gender;
+    private Double weight;
+    private Double height;
+    private EWeightChangeRate weightChangeRate;
 }

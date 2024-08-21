@@ -39,6 +39,7 @@ public class UserParamServiceImpl implements UserParamService {
         userParam.setWeight(userParamDTO.getWeight());
         userParam.setTrainingType(userParamDTO.getTrainingType());
         userParam.setWeightGoal(userParamDTO.getWeightGoal());
+        userParam.setWeightChangeRate(userParamDTO.getWeightChangeRate());
 
         userParam = userParamRepository.save(userParam);
         return userParam;
@@ -56,22 +57,11 @@ public class UserParamServiceImpl implements UserParamService {
             userParam.setWeight(updatedUser.getWeight());
             userParam.setHeight(updatedUser.getHeight());
             userParam.setWeightGoal(updatedUser.getWeightGoal());
+            userParam.setWeightChangeRate(updatedUser.getWeightChangeRate());
             userParamRepository.save(userParam);
 
         } else {
             throw new NoSuchElementException("The user with the id " + " doesn't exist in the database.");
         }
     }
-
-//    @Override
-//    public void deleteUser(UUID id) {
-//        Optional<User> optionalUser = userRepository.findById(id);
-//
-//        if (optionalUser.isPresent()) {
-//            User user = optionalUser.get();
-//            userRepository.delete(user);
-//        } else {
-//            throw new NoSuchElementException("The user with the id " + " doesn't exist in the database.");
-//        }
-//    }
 }

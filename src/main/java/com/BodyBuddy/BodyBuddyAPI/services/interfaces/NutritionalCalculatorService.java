@@ -3,6 +3,7 @@ package com.BodyBuddy.BodyBuddyAPI.services.interfaces;
 import com.BodyBuddy.BodyBuddyAPI.models.UserParam;
 import com.BodyBuddy.BodyBuddyAPI.models.enums.EGender;
 import com.BodyBuddy.BodyBuddyAPI.models.enums.ETrainingType;
+import com.BodyBuddy.BodyBuddyAPI.models.enums.EWeightChangeRate;
 import com.BodyBuddy.BodyBuddyAPI.models.enums.EWeightGoal;
 
 import java.time.LocalDate;
@@ -12,7 +13,7 @@ public interface NutritionalCalculatorService {
 
     public int calculateCalories(UUID id);
 
-    public double adjustCaloriesBasedOnWeightGoal(double calories, EWeightGoal weightGoal);
+    public double adjustCaloriesBasedOnWeightGoal(double calories, EWeightGoal weightGoal, EWeightChangeRate weightChangeRate);
 
     public int calculateAge(LocalDate birthDate, LocalDate currentDate);
 

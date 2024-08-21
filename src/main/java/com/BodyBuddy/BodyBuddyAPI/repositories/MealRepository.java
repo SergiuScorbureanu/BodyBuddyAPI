@@ -2,6 +2,7 @@ package com.BodyBuddy.BodyBuddyAPI.repositories;
 
 import com.BodyBuddy.BodyBuddyAPI.models.Meal;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -13,4 +14,7 @@ public interface MealRepository extends JpaRepository<Meal, UUID> {
     List<Meal> findByUser_Id(UUID userId);
 
     List<Meal> findByUserIdAndDate(UUID userId, String date);
+
+    @Query("SELECT COUNT(m) FROM Meal m")
+    Long countMeals();
 }

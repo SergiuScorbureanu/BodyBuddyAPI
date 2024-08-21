@@ -32,7 +32,7 @@ import java.util.Set;
 public class User extends BaseEntity {
 
     @NotBlank
-    @Size(max = 20)
+    @Size(max = 50)
     private String username;
 
     @NotBlank
@@ -40,15 +40,21 @@ public class User extends BaseEntity {
     @Email
     private String email;
 
-    @NotBlank
     @Size(max = 120)
     private String password;
 
-    @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(name = "user_roles",
-            joinColumns = @JoinColumn(name = "user_id"),
-            inverseJoinColumns = @JoinColumn(name = "role_id"))
-    private Set<Role> roles = new HashSet<>();
+    @Column(name = "picture")
+    private String picture;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "role_id")
+    private Role role;
+
+//    @ManyToMany(fetch = FetchType.LAZY)
+//    @JoinTable(name = "user_roles",
+//            joinColumns = @JoinColumn(name = "user_id"),
+//            inverseJoinColumns = @JoinColumn(name = "role_id"))
+//    private Set<Role> roles = new HashSet<>();
 
 //    @ManyToMany(fetch = FetchType.LAZY)
 //    @JoinTable(name = "user_meals",
@@ -57,7 +63,10 @@ public class User extends BaseEntity {
 //   private Set<Meal> meals = new HashSet<>();
 
     @JsonManagedReference
-    @OneToMany(mappedBy = "user")
+    @OneToMany(
+            mappedBy = "user",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true)
     private Set<Meal> meals = new HashSet<>();
 
     @OneToMany(mappedBy="userId")

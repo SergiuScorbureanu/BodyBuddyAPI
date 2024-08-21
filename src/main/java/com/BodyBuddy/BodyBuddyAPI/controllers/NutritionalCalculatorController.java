@@ -13,7 +13,6 @@ import java.util.UUID;
 
 @RestController
 @RequestMapping(path = "/bodybuddy/v1/nutritional-calculator")
-//@CrossOrigin(origins = "http://localhost:4200")
 @RequiredArgsConstructor
 public class NutritionalCalculatorController {
 

@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -33,7 +34,7 @@ public class FoodServiceImpl implements FoodService {
     }
 
     @Override
-    public void updateFood(Long id, Food updatedFood) {
+    public void updateFood(UUID id, Food updatedFood) {
         Food food = foodRepository.findById(id).orElseThrow(() ->
                 new NoSuchElementException("Food with the id " + id + " doesn't exist in the database."));
 
@@ -42,17 +43,23 @@ public class FoodServiceImpl implements FoodService {
         food.setCarbohydrates(updatedFood.getCarbohydrates());
         food.setFat(updatedFood.getFat());
         food.setProtein(updatedFood.getProtein());
+        food.setMeasurementUnit(updatedFood.getMeasurementUnit());
         food.setQuantity(updatedFood.getQuantity());
-        //food.setFiber(updatedFood.getFiber());
 
         foodRepository.save(food);
     }
 
     @Override
-    public void deleteFood(Long id) {
-        Food food = foodRepository.findById(id).orElseThrow(() ->
-                new NoSuchElementException("Food with the id " + id + " doesn't exist in the database."));
-        foodRepository.delete(food);
+    public void deleteFood(UUID id) {
+        Optional<Food> optionalFood = foodRepository.findById(id);
+
+        if(optionalFood.isPresent()) {
+            Food food = optionalFood.get();
+            foodRepository.delete(food);
+        } else {
+            throw new NoSuchElementException("Food with the id " + id + " doesn't exist in the database.");
+        }
+
     }
 
     @Override

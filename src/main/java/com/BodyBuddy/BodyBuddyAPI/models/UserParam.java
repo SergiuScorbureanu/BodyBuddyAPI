@@ -3,6 +3,7 @@ package com.BodyBuddy.BodyBuddyAPI.models;
 import com.BodyBuddy.BodyBuddyAPI.models.abstracts.BaseEntity;
 import com.BodyBuddy.BodyBuddyAPI.models.enums.EGender;
 import com.BodyBuddy.BodyBuddyAPI.models.enums.ETrainingType;
+import com.BodyBuddy.BodyBuddyAPI.models.enums.EWeightChangeRate;
 import com.BodyBuddy.BodyBuddyAPI.models.enums.EWeightGoal;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -36,6 +37,10 @@ public class UserParam extends BaseEntity {
     @Column(name = "weight_goal")
     @Enumerated(EnumType.STRING)
     private EWeightGoal weightGoal;
+
+    @Column(name = "weight_change_rate")
+    @Enumerated(EnumType.STRING)
+    private EWeightChangeRate weightChangeRate;
 
     @Column(name = "gender") //, nullable = false)
     @Enumerated(EnumType.STRING)

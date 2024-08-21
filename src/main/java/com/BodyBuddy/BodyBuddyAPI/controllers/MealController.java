@@ -21,6 +21,11 @@ public class MealController {
 
     private final MealServiceImpl mealService;
 
+    @GetMapping
+    public Long countMeals() {
+        return mealService.countMeals();
+    }
+
     @GetMapping(path = "/{userId}/{date}")
     public ResponseEntity<List<OldMealDTO>> getMealsByUserIdAndDate(
             @PathVariable UUID userId,
@@ -32,6 +37,7 @@ public class MealController {
             }
             List<OldMealDTO> oldMealDTOS = meals.stream().map(meal -> {
                 OldMealDTO oldMealDTO = new OldMealDTO();
+                oldMealDTO.setId(meal.getId());
                 oldMealDTO.setMealType(meal.getMealType());
                 oldMealDTO.setProtein(meal.getProtein());
                 oldMealDTO.setFat(meal.getFat());
@@ -60,6 +66,25 @@ public class MealController {
         }
     }
 
+//    @GetMapping
+//    public ResponseEntity<List<MealDTO>> getAllMeals() {
+//        List<Meal> meals = mealService.getMeals();
+//        if (meals.isEmpty()) {
+//            return ResponseEntity.noContent().build();
+//        }
+//        List<MealDTO> mealDTOS = meals.stream().map(meal -> new MealDTO(
+//                meal.getId(),
+//                meal.getFoods(),
+//                meal.getMealType(),
+//                meal.getProtein(),
+//                meal.getCalories(),
+//                meal.getFat(),
+//                meal.getUser(),
+//                meal.getDate()
+//        )).collect(Collectors.toList());
+//        return ResponseEntity.ok(mealDTOS);
+//    }
+
     @PostMapping
     public ResponseEntity<Map<String, String>> createMeal(@RequestBody MealDTO mealDTO) {
         try {
@@ -85,12 +110,14 @@ public class MealController {
     }
 
     @DeleteMapping(path = "/{id}")
-    public ResponseEntity<String> deleteMeal(@PathVariable UUID id) {
+    public ResponseEntity<Map<String, String>> deleteMeal(@PathVariable UUID id) {
+        Map<String, String> response = new HashMap<>();
         try {
             mealService.deleteMeal(id);
-            return ResponseEntity.ok("The meal has been deleted successfully!");
+            response.put("message", "The meal has been deleted successfully!");
+            return new ResponseEntity<>(response, HttpStatus.OK);
         } catch (NoSuchElementException e) {
-            return ResponseEntity.notFound().build();
+            return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
         }
     }
 }

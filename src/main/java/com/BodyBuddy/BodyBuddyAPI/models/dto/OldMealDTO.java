@@ -1,6 +1,5 @@
 package com.BodyBuddy.BodyBuddyAPI.models.dto;
 
-import com.BodyBuddy.BodyBuddyAPI.models.Food;
 import com.BodyBuddy.BodyBuddyAPI.models.enums.EMealType;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -8,7 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.util.List;
-import java.util.Set;
+import java.util.UUID;
 
 
 @NoArgsConstructor
@@ -17,6 +16,7 @@ import java.util.Set;
 @Setter
 public class OldMealDTO {
 
+    private UUID id;
     private List<OldFoodDTO> foods;
     private String userId;
     private String date;

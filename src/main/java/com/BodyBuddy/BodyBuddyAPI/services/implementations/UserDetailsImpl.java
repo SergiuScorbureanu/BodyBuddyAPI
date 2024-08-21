@@ -10,7 +10,6 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 public class UserDetailsImpl implements UserDetails {
 
@@ -37,9 +36,8 @@ public class UserDetailsImpl implements UserDetails {
     }
 
     public static UserDetailsImpl build(User user) {
-        List<GrantedAuthority> authorities = user.getRoles().stream()
-                .map(role -> new SimpleGrantedAuthority(role.getName().name()))
-                .collect(Collectors.toList());
+        GrantedAuthority authority = new SimpleGrantedAuthority(user.getRole().getName().name());
+        List<GrantedAuthority> authorities = List.of(authority);
 
         return new UserDetailsImpl(user.getId(),
                 user.getUsername(),
@@ -47,6 +45,7 @@ public class UserDetailsImpl implements UserDetails {
                 user.getPassword(),
                 authorities);
     }
+
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

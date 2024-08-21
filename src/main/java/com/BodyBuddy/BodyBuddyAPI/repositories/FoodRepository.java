@@ -9,7 +9,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 @Repository
-public interface FoodRepository extends JpaRepository<Food, Long> {
+public interface FoodRepository extends JpaRepository<Food, UUID> {
 
     Optional<Food> findByName(String name);
 

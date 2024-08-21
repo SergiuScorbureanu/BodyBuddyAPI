@@ -4,6 +4,7 @@ import com.BodyBuddy.BodyBuddyAPI.models.User;
 import com.BodyBuddy.BodyBuddyAPI.models.UserParam;
 import com.BodyBuddy.BodyBuddyAPI.models.enums.EGender;
 import com.BodyBuddy.BodyBuddyAPI.models.enums.ETrainingType;
+import com.BodyBuddy.BodyBuddyAPI.models.enums.EWeightChangeRate;
 import com.BodyBuddy.BodyBuddyAPI.models.enums.EWeightGoal;
 import com.BodyBuddy.BodyBuddyAPI.repositories.UserRepository;
 import com.BodyBuddy.BodyBuddyAPI.services.interfaces.NutritionalCalculatorService;
@@ -20,7 +21,6 @@ import java.util.UUID;
 @AllArgsConstructor
 public class NutritionalCalculatorServiceImpl implements NutritionalCalculatorService {
 
-    // private final UserParamRepository userParamRepository;
     private final UserRepository userRepository;
 
 //    @Override
@@ -38,12 +38,39 @@ public class NutritionalCalculatorServiceImpl implements NutritionalCalculatorSe
 //    }
 
     @Override
-    public double adjustCaloriesBasedOnWeightGoal(double calories, EWeightGoal weightGoal) {
-        return switch (weightGoal) {
-            case LOSE_WEIGHT -> calories - 500;
-            case GAIN_WEIGHT -> calories + 500;
-            case MAINTAIN_WEIGHT -> calories;
-        };
+    public double adjustCaloriesBasedOnWeightGoal(double calories, EWeightGoal weightGoal, EWeightChangeRate weightChangeRate) {
+        double adjustmentFactor;
+
+        // Factor de ajustare bazat pe rata de schimbare în greutate
+        switch (weightChangeRate) {
+            case SLOW:
+                adjustmentFactor = 250; // Ajustare lentă
+                break;
+            case MODERATE:
+                adjustmentFactor = 500; // Ajustare moderată
+                break;
+            case FAST:
+                adjustmentFactor = 750; // Ajustare rapidă
+                break;
+            default:
+                throw new IllegalArgumentException("Invalid weight change rate");
+        }
+
+        // Ajustare bazată pe obiectivul de greutate
+        switch (weightGoal) {
+            case LOSE_WEIGHT:
+                calories -= adjustmentFactor;
+                break;
+            case GAIN_WEIGHT:
+                calories += adjustmentFactor;
+                break;
+            case MAINTAIN_WEIGHT:
+                // Poți adăuga logică suplimentară dacă este necesar
+                break;
+            default:
+                throw new IllegalArgumentException("Invalid weight goal");
+        }
+        return calories;
     }
 
     @Override
@@ -105,7 +132,7 @@ public class NutritionalCalculatorServiceImpl implements NutritionalCalculatorSe
         int age = calculateAge(userParam.getBirthDay(), LocalDate.now());
         double bmr = calculateBMR(userParam.getWeight(), userParam.getHeight(), age, userParam.getGender());
         double adjustedBmr = adjustBMRBasedOnActivity(bmr, userParam.getTrainingType());
-        double goalAdjustedCalories = adjustCaloriesBasedOnWeightGoal(adjustedBmr, userParam.getWeightGoal());
+        double goalAdjustedCalories = adjustCaloriesBasedOnWeightGoal(adjustedBmr, userParam.getWeightGoal(), userParam.getWeightChangeRate());
 
         return (int) Math.round(goalAdjustedCalories);
     }

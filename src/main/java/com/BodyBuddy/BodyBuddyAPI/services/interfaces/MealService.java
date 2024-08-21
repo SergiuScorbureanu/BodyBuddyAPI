@@ -8,7 +8,7 @@ import java.util.UUID;
 
 public interface MealService {
 
-    public List<Meal> getMeals();
+    public Long countMeals();
 
     public List<Meal> getMealsByUserId(UUID userId);
 

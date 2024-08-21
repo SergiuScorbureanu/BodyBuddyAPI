@@ -3,22 +3,27 @@ package com.BodyBuddy.BodyBuddyAPI.config;
 import com.BodyBuddy.BodyBuddyAPI.services.implementations.UserDetailsServiceImpl;
 import com.BodyBuddy.BodyBuddyAPI.util.AuthEntryPointJwt;
 import com.BodyBuddy.BodyBuddyAPI.util.AuthTokenFilter;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
+import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.oauth2.server.resource.introspection.OpaqueTokenIntrospector;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.reactive.function.client.WebClient;
 
 @Configuration
 @EnableWebSecurity
+@RequiredArgsConstructor
 public class SecurityConfig {
 
     @Autowired
@@ -26,6 +31,9 @@ public class SecurityConfig {
 
     @Autowired
     private AuthEntryPointJwt unauthorizedHandler;
+
+    private final WebClient.Builder webClientBuilder;
+    private final TokenIntrospectionService tokenIntrospectionService;
 
     @Bean
     public AuthTokenFilter authenticationJwtTokenFilter() {
@@ -55,23 +63,35 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http.csrf(csrf -> csrf.disable())
+                .cors(Customizer.withDefaults())
                 .exceptionHandling(exception -> exception.authenticationEntryPoint(unauthorizedHandler))
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .authorizeHttpRequests(auth ->
-                        auth.requestMatchers("/bodybuddy/v1/auth/**").permitAll()
-                                .requestMatchers("/bodybuddy/v1/users/**").permitAll()
-                                .requestMatchers("/bodybuddy/v1/user_params/**").permitAll()
-                                .requestMatchers("/bodybuddy/v1/nutritional-calculator/**").permitAll()
-                                .requestMatchers("/bodybuddy/v1/meals/**").permitAll()
-                                .requestMatchers("/bodybuddy/v1/foods/**").permitAll()
-                                .requestMatchers("/bodybuddy/v1/test/**").permitAll()
-                                .anyRequest().authenticated()
-                );
-
-        http.authenticationProvider(authenticationProvider());
-
-        http.addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);
+                .authorizeHttpRequests((authorize) -> authorize
+                        .requestMatchers("/bodybuddy/v1/auth/**",
+                                "/bodybuddy/v1/users/**",
+                                "/bodybuddy/v1/user-params/**",
+                                "/bodybuddy/v1/user-details/**",
+                                "/bodybuddy/v1/nutritional-calculator/**",
+                                "/bodybuddy/v1/meals/**",
+                                "/bodybuddy/v1/foods/**",
+                                "/bodybuddy/v1/test/**")
+                        .permitAll()
+                        .anyRequest().authenticated()
+                )
+                .authenticationProvider(authenticationProvider())
+                .addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class)
+                .oauth2ResourceServer(oauth2 -> oauth2.opaqueToken(token -> token.introspector(introspector())));
 
         return http.build();
+    }
+
+    @Bean
+    public OpaqueTokenIntrospector introspector() {
+        return new GoogleOpaqueTokenIntrospector(tokenIntrospectionService);
+    }
+
+    @Bean
+    public WebClient webClient() {
+        return webClientBuilder.build();
     }
 }

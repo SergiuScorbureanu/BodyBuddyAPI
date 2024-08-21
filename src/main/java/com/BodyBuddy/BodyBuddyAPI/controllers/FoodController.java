@@ -42,15 +42,15 @@ public class FoodController {
         return ResponseEntity.ok(foodDTOS);
     }
 
-    @GetMapping(path = "/{name}")
-    public ResponseEntity<Food> getFoodByName(@PathVariable String name) {
-        try {
-            Food food = foodService.getFoodByName(name);
-            return ResponseEntity.ok(food);
-        } catch (NoSuchElementException e) {
-            return ResponseEntity.notFound().build();
-        }
-    }
+//    @GetMapping(path = "/{name}")
+//    public ResponseEntity<Food> getFoodByName(@PathVariable String name) {
+//        try {
+//            Food food = foodService.getFoodByName(name);
+//            return ResponseEntity.ok(food);
+//        } catch (NoSuchElementException e) {
+//            return ResponseEntity.notFound().build();
+//        }
+//    }
 
     @GetMapping("/search")
     public ResponseEntity<List<Food>> searchFoods(@RequestParam String searchTerm) {
@@ -61,11 +61,6 @@ public class FoodController {
         return ResponseEntity.ok(foods);
     }
 
-//    @PostMapping
-//    public ResponseEntity<String> createFood(@RequestBody Food food) {
-//        foodService.createFood(food);
-//        return ResponseEntity.ok("The food has been added successfully!");
-//    }
 
     @PostMapping
     public ResponseEntity<Map<String, String>> createFood(@RequestBody Food food) {
@@ -81,22 +76,28 @@ public class FoodController {
     }
 
     @PutMapping(path = "/{id}")
-    public ResponseEntity<String> updateFood(@PathVariable Long id, @RequestBody Food updatedFood) {
+    public ResponseEntity<Map<String, String>> updateFood(@PathVariable UUID id, @RequestBody Food updatedFood) {
+        Map<String, String> response = new HashMap<>();
         try {
             foodService.updateFood(id, updatedFood);
-            return ResponseEntity.ok("The food has been updated successfully!");
+            response.put("message", "The food has been updated successfully!");
+            return new ResponseEntity<>(response, HttpStatus.OK);
         } catch (NoSuchElementException e) {
-            return ResponseEntity.notFound().build();
+            response.put("message", "Food not found.");
+            return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
         }
     }
 
     @DeleteMapping(path = "/{id}")
-    public ResponseEntity<String> deleteFood(@PathVariable Long id) {
+    public ResponseEntity<Map<String, String>> deleteFood(@PathVariable UUID id) {
+        Map<String, String> response = new HashMap<>();
         try {
             foodService.deleteFood(id);
-            return ResponseEntity.ok("The food has been deleted successfully!");
+            response.put("message", "The food has been deleted successfully!");
+            return new ResponseEntity<>(response, HttpStatus.OK);
         } catch (NoSuchElementException e) {
-            return ResponseEntity.notFound().build();
+            response.put("message", "Food not found.");
+            return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
         }
     }
 }

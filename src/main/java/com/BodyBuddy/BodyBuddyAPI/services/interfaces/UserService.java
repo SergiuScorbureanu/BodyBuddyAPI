@@ -1,6 +1,7 @@
 package com.BodyBuddy.BodyBuddyAPI.services.interfaces;
 
 import com.BodyBuddy.BodyBuddyAPI.models.User;
+import com.BodyBuddy.BodyBuddyAPI.models.dto.UserDTO;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.List;
@@ -8,14 +9,14 @@ import java.util.UUID;
 
 public interface UserService {
 
-    public List<User> getUsers();
+    public List<UserDTO> getUsers();
 
-    //public void createUser(User user);
+    public void updateUsername(UUID id, String username);
 
-    //public void updateUser(UUID id, User updatedUser);
+    public void updateEmail(UUID id, String email);
+
+    public void updatePassword(UUID id, String password);
 
     public void deleteUser(UUID id);
-
-
 
 }

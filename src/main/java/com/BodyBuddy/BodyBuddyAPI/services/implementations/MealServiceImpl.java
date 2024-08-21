@@ -22,8 +22,8 @@ public class MealServiceImpl implements MealService {
     private final UserRepository userRepository;
 
     @Override
-    public List<Meal> getMeals() {
-        return mealRepository.findAll();
+    public Long countMeals() {
+        return mealRepository.countMeals();
     }
 
     @Override
